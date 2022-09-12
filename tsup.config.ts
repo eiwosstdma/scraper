@@ -5,7 +5,6 @@ const options: Options = {
   minifyWhitespace: true,
   minifyIdentifiers: true,
   minifySyntax: true,
-  keepNames: false,
   outDir: './dist/back-end/',
   target: 'node16',
   format: 'cjs',
