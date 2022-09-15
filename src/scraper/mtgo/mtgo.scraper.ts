@@ -99,7 +99,7 @@ export class MtgoScraper {
     }
   }
 
-  async getDataFromUrl(url: string): Promise<null | { name: string, data: string }> {
+  private async getDataFromUrl(url: string): Promise<null | { name: string, data: string }> {
     const urlArrSegment = url.split('/');
     const endPart = urlArrSegment[urlArrSegment.length - 1];
     const randomHex = randomBytes(4).toString('hex');
@@ -120,7 +120,7 @@ export class MtgoScraper {
       }
   }
 
-  async parseMtgo (name: string, content: string): Promise<null | { tournamentData: Tournament, finalDeckLists: Array<Deck> }> {
+  private async parseMtgo (name: string, content: string): Promise<null | { tournamentData: Tournament, finalDeckLists: Array<Deck> }> {
     try {
       const data = new JSDOM(content).window.document;
 
@@ -169,5 +169,12 @@ export class MtgoScraper {
       console.log(err);
       return null;
     }
+  }
+
+  async run(url: string) {
+    const dataFromUrl = await this.getDataFromUrl(url);
+    if (dataFromUrl !== null) {
+      return await this.parseMtgo(dataFromUrl.name, dataFromUrl.data);
+    } else return null;
   }
 }
