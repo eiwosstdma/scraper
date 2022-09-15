@@ -1,10 +1,7 @@
 /**
  * Node imports
  */
-import { resolve } from 'node:path';
-import { writeFile, readFile, rm } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
-import { promisify } from 'node:util';
 
 /**
  * Module imports
@@ -14,31 +11,23 @@ import { JSDOM } from 'jsdom';
 /**
  * Types
  */
-import { Deck, Format, LevelOfPlay, Tournament } from '../core/common.core';
+import { Deck, Format, LevelOfPlay, Tournament } from '../../core/common.core';
 
 /**
  * Application imports
  */
-import { DeckModel } from '../models/deck.model';
-import { ReferenceModel } from '../models/reference.model';
-import { TournamentModel } from '../models/tournament.model';
+
 
 /**
- * Initialisations
+ * Initialisation
  */
 
 /**
  * Class
  */
 export class MtgoScraper {
-  private howMuchTournaments: number;
-
-  constructor(options: { howMuch: number }) {
-    this.howMuchTournaments = options.howMuch;
-  }
-
-  private createTournamentData (fileName: string, totalPlayers: number, playedAtFrom: string): Tournament {
-    const fileNameArr = fileName.split('.');
+  private createTournamentData (name: string, totalPlayers: number, playedAtFrom: string): Tournament {
+    const fileNameArr = name.split('.');
     const fileNameArrName = fileNameArr[1].split('-');
 
     fileNameArrName.pop();
@@ -110,37 +99,30 @@ export class MtgoScraper {
     }
   }
 
-  async getDataFromUrl(url: string): Promise<Boolean> {
+  async getDataFromUrl(url: string): Promise<null | { name: string, data: string }> {
     const urlArrSegment = url.split('/');
     const endPart = urlArrSegment[urlArrSegment.length - 1];
     const randomHex = randomBytes(4).toString('hex');
 
-    const isTournamentAlreadyScraped = ReferenceModel.get(endPart);
-
-    if (isTournamentAlreadyScraped === undefined) {
       try {
         const fetched = await fetch(url);
         const data = await fetched.text();
 
         const fileName = `mtgo.${ endPart }.${ randomHex }.html`;
-        const pathToFile = resolve(`./database/temporary/${ fileName }`);
 
-        ReferenceModel.set(endPart, randomHex);
-        await writeFile(pathToFile, data);
-
+        return {
+          name: fileName,
+          data
+        }
       } catch(err) {
         console.log(err);
-        return false;
+        return null;
       }
-    return true;
-    } else return false;
   }
 
-  async parseMtgo (fileName: string)  {
+  async parseMtgo (name: string, content: string): Promise<null | { tournamentData: Tournament, finalDeckLists: Array<Deck> }> {
     try {
-      const filePath = resolve(`./database/temporary/${ fileName }`);
-      const buffer = await readFile(filePath);
-      const data = new JSDOM(buffer.toString()).window.document;
+      const data = new JSDOM(content).window.document;
 
       const allDeckLists = Array.from(data.querySelectorAll('.deck-group'));
       const dateFromADecklist = data.querySelector("div.title-deckicon > span.deck-meta");
@@ -148,18 +130,18 @@ export class MtgoScraper {
       // @ts-ignore
       const currentDatePlayed = dateFromADecklist.children[1].textContent.split(' ').join('').split('on').reverse()[0].replaceAll('/', '-');
 
-      const tournamentData: Tournament = this.createTournamentData(fileName, allDeckLists.length, currentDatePlayed);
+      const tournamentData: Tournament = this.createTournamentData(name, allDeckLists.length, currentDatePlayed);
 
       //createDeckData(allDeckLists[0]);
       const players = allDeckLists.map(deckList => this.createDeckData(deckList));
 
-      let final: Array<Deck>;
+      let finalDeckLists: Array<Deck>;
 
       if (tournamentData.levelOfPlay !== 'league') {
         const allMetaData = data.querySelector("table.sticky-enabled") as Element;
         const tBody = Array.from(allMetaData.lastElementChild?.querySelectorAll('tr') as NodeListOf<HTMLTableRowElement>);
         const finalMetaData = tBody.map(data => this.createMetaData(data));
-        final = players.map((value, index) => {
+        finalDeckLists = players.map((value, index) => {
           return {
             ...value,
             ...finalMetaData[index],
@@ -169,7 +151,7 @@ export class MtgoScraper {
           }
         });
       } else {
-        final = players.map((data) => {
+        finalDeckLists = players.map((data) => {
           return {
             ...data,
             tournamentName: tournamentData.name,
@@ -179,14 +161,13 @@ export class MtgoScraper {
         });
       }
 
-      TournamentModel.set(tournamentData);
-      final.forEach((deck) => DeckModel.set(deck));
-      await rm(filePath);
-
-      return true;
+      return {
+        tournamentData,
+        finalDeckLists
+      }
     } catch(err) {
       console.log(err);
-      return false;
+      return null;
     }
   }
 }
