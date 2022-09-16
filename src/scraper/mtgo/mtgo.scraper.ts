@@ -17,7 +17,6 @@ import { Deck, Format, LevelOfPlay, Tournament } from '../../core/common.core';
  * Application imports
  */
 
-
 /**
  * Initialisation
  */
