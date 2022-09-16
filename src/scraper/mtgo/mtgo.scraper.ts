@@ -1,7 +1,6 @@
 /**
  * Node imports
  */
-import { randomBytes } from 'node:crypto';
 
 /**
  * Module imports
@@ -16,6 +15,7 @@ import { Deck, Format, LevelOfPlay, Tournament } from '../../core/common.core';
 /**
  * Application imports
  */
+import { generate12LString } from '../../core/utilities.core';
 
 /**
  * Initialisation
@@ -101,7 +101,7 @@ export class MtgoScraper {
   private async getDataFromUrl(url: string): Promise<null | { name: string, data: string }> {
     const urlArrSegment = url.split('/');
     const endPart = urlArrSegment[urlArrSegment.length - 1];
-    const randomHex = randomBytes(4).toString('hex');
+    const randomHex = generate12LString();
 
       try {
         const fetched = await fetch(url);
