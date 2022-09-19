@@ -5,18 +5,17 @@
 /**
  * Module imports
  */
-import { envJson } from 'dotenv-for-json';
-import { initialiseDatabase } from './core/initialise-database.core';
 
 /**
- * Application
+ * Application imports
  */
-(async () => {
-  const isWorking = await envJson('conf', { isPrefix: true, prefixName: 'cf' });
-  initialiseDatabase();
-  // await run(25);
-  // await managerMtgo(500);
-  // const data = await linkBuilderMtgo(0);
+import { ScraperParserMtgo } from './core/mtgo/scraper-parser.mtgo';
+import { LinkBuilderMtgo } from './core/mtgo/link-builder.mtgo';
 
-  // console.log(data);
-})();
+/**
+ * Export for libs usability
+ */
+export const index = {
+  MtgoScraper: ScraperParserMtgo,
+  MtgoLinker: LinkBuilderMtgo
+};

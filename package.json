@@ -1,37 +1,41 @@
 {
   "name": "mtg-data-scrapper",
   "version": "1.0.0",
-  "description": "",
-  "main": "./dist/back-end/index.js",
+  "description": "Tiny scraper for mtg open results.",
+  "repository": "https://github.com/eiwosstdma/scraper",
+  "author": "eiwosstdma <eiwos.studio@gmail.com>",
+  "keywords": [
+    "mtg",
+    "scraper",
+    "scraping"
+  ],
+  "license": "ISC",
+  "main": "./dist/index.js",
+  "private": false,
+  "engines": {
+    "node": ">= 18.0.0"
+  },
   "scripts": {
-    "start": "node ./dist/back-end/index.js",
+    "start": "node ./dist/index.js",
     "test": "jest",
     "build": "tsup ./src/index.ts",
-    "dev": "ts-node ./src/index.ts",
-    "serve": "nodemon ./src/index.ts"
+    "dev": "ts-node ./src/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.19.1",
     "@babel/preset-env": "^7.19.1",
     "@babel/preset-typescript": "^7.18.6",
-    "@types/better-sqlite3": "^7.6.0",
     "@types/jest": "^29.0.0",
     "@types/jsdom": "^20.0.0",
     "@types/node": "^18.7.14",
     "babel-jest": "^29.0.3",
     "jest": "^29.0.1",
-    "nodemon": "^2.0.19",
     "ts-jest": "^29.0.1",
     "ts-node": "^10.9.1",
     "tsup": "^6.2.3",
     "typescript": "^4.8.2"
   },
   "dependencies": {
-    "better-sqlite3": "^7.6.2",
-    "dotenv-for-json": "^1.3.1",
     "jsdom": "^20.0.0",
     "puppeteer": "^17.1.2"
   }

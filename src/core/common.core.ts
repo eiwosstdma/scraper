@@ -1,19 +1,10 @@
 /**
  *
  */
-export interface CustomMessage {
-  booleanValue: boolean;
-  messageValue?: string;
-}
 
-export interface CustomScrap {
-  url: string;
-  platform: Platform;
-  details?: string;
-}
 
 /**
- * Types for the API/App
+ * Types for the Application
  */
 export interface Card {
   quantity: number;
@@ -22,6 +13,7 @@ export interface Card {
 }
 
 export interface Filter {
+  format: Format;
   name: string;
   includes: Array<string>;
   excludes: Array<string>;
@@ -63,6 +55,11 @@ export interface Tournament {
   organizer: Organizer;
   platform: Platform;
   levelOfPlay: LevelOfPlay;
+}
+
+export interface ConfigurationLinker {
+  wantedFormat: Array<Format>;
+  wantedLevel?: Array<LevelOfPlay>;
 }
 
 export type Format = 'vintage' | 'legacy' | 'modern' | 'pioneer' | 'standard' | 'pauper';

@@ -10,12 +10,12 @@ import { JSDOM } from 'jsdom';
 /**
  * Types
  */
-import { Deck, Format, LevelOfPlay, Tournament } from '../../core/common.core';
+import { Deck, Format, LevelOfPlay, Tournament } from '../common.core';
 
 /**
  * Application imports
  */
-import { generate12LString } from '../../core/utilities.core';
+import { generate12LString } from '../utilities.core';
 
 /**
  * Initialisation
@@ -24,8 +24,8 @@ import { generate12LString } from '../../core/utilities.core';
 /**
  * Class
  */
-export class MtgoScraper {
-  private createTournamentData (name: string, totalPlayers: number, playedAtFrom: string): Tournament {
+export class ScraperParserMtgo {
+  protected createTournamentData (name: string, totalPlayers: number, playedAtFrom: string): Tournament {
     const fileNameArr = name.split('.');
     const fileNameArrName = fileNameArr[1].split('-');
 
@@ -52,7 +52,7 @@ export class MtgoScraper {
     };
   }
 
-  private createDeckData (element: Element): Pick<Deck, 'name' | 'subId' | 'main' | 'side' | 'owner'> {
+  protected createDeckData (element: Element): Pick<Deck, 'name' | 'subId' | 'main' | 'side' | 'owner'> {
     const subIdName = element.getAttribute('subid');
 
     const textDeckList = element.querySelectorAll('div.toggle-text.toggle-subnav > div.deck-list-text > div.sorted-by-overview-container.sortedContainer > div.clearfix.element > span.row');
@@ -88,7 +88,7 @@ export class MtgoScraper {
     }
   }
 
-  private createMetaData (metaData: Element): Pick<Deck, 'rank' | 'point' | 'omwp' | 'gwp' | 'ogwp'> {
+  protected createMetaData (metaData: Element): Pick<Deck, 'rank' | 'point' | 'omwp' | 'gwp' | 'ogwp'> {
     return {
       rank: Number(metaData.children[0].innerHTML),
       point: Number(metaData.children[2].innerHTML),
@@ -98,7 +98,7 @@ export class MtgoScraper {
     }
   }
 
-  private async getDataFromUrl(url: string): Promise<null | { name: string, data: string }> {
+  protected async getDataFromUrl(url: string): Promise<null | { name: string, data: string }> {
     const urlArrSegment = url.split('/');
     const endPart = urlArrSegment[urlArrSegment.length - 1];
     const randomHex = generate12LString();
@@ -119,7 +119,7 @@ export class MtgoScraper {
       }
   }
 
-  private async parseMtgo (name: string, content: string): Promise<null | { tournamentData: Tournament, finalDeckLists: Array<Deck> }> {
+  protected async parseMtgo (name: string, content: string): Promise<null | { tournamentData: Tournament, finalDeckLists: Array<Deck> }> {
     try {
       const data = new JSDOM(content).window.document;
 
