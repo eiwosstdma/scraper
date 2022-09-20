@@ -7,7 +7,11 @@ const options: Options = {
   minifySyntax: true,
   outDir: './dist/',
   target: 'node18',
-  dts: true,
+  globalName: 'mtg-scraper',
+  dts: {
+    only: true,
+    resolve: false
+  },
   format: 'cjs',
   clean: true,
   platform: 'node',

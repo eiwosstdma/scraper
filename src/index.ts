@@ -1,21 +1,6 @@
 /**
- * Node imports
- */
-
-/**
- * Module imports
- */
-
-/**
- * Application imports
- */
-import { ScraperParserMtgo } from './core/mtgo/scraper-parser.mtgo';
-import { LinkBuilderMtgo } from './core/mtgo/link-builder.mtgo';
-
-/**
  * Export for libs usability
  */
-export const index = {
-  MtgoScraper: ScraperParserMtgo,
-  MtgoLinker: LinkBuilderMtgo
-};
+export { ScraperParserMtgo } from './core/mtgo/scraper-parser.mtgo';
+export { LinkBuilderMtgo } from './core/mtgo/link-builder.mtgo';
+export * as ToolType from './core/common.core';
