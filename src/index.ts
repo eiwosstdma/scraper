@@ -15,3 +15,8 @@ export {
   Organizer,
   LevelOfPlay
 } from './core/common.core';
+
+/**
+ * Tournament scraping: Around 1 second
+ * Link for a day: Around 2 seconds
+ */
