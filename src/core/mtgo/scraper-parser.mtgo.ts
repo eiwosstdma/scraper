@@ -16,6 +16,7 @@ import { Deck, Format, LevelOfPlay, Tournament } from '../common.core';
  * Application imports
  */
 import { generate12LString } from '../utilities.core';
+import { sleepUntil } from '../utilities.core';
 
 /**
  * Initialisation
@@ -106,6 +107,7 @@ export class ScraperParserMtgo {
       try {
         const fetched = await fetch(url);
         const data = await fetched.text();
+        await sleepUntil(100);
 
         const fileName = `mtgo.${ endPart }.${ randomHex }.html`;
 
