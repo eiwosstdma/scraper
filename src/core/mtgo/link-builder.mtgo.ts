@@ -11,6 +11,7 @@ import { JSDOM } from 'jsdom';
  * Application imports
  */
 import { ConfigurationLinker } from '../common.core';
+import { sleepUntil } from '../utilities.core';
 
 /**
  * Initialisation
@@ -37,7 +38,7 @@ export class LinkBuilderMtgo {
       const allLinks: Array<string> = [];
 
       allFormat.forEach(format => allLevel.forEach(level => {
-        const url = `${baseUrl}${ format }-${ level }-${ dateToBeBuilt }`;
+        const url = `${ baseUrl }${ format }-${ level }-${ dateToBeBuilt }`;
         allLinks.push(url);
       }));
 
@@ -54,7 +55,7 @@ export class LinkBuilderMtgo {
       const doc = new JSDOM(result).window.document;
 
       const isNotFound = doc.querySelector('.no-result');
-
+      await sleepUntil(100);
       if (isNotFound?.textContent?.replace(/\s/g, '') !== 'noresultfound') {
         return link;
       } else return null;
