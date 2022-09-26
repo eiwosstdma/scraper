@@ -69,7 +69,7 @@ export class LinkBuilderMtgo {
     return Promise.all(links.map(link => this.checkLink(link)));
   }
 
-  async run(howMuchBackward: number, configuration?: ConfigurationLinker) {
+  async run(howMuchBackward: number, configuration?: ConfigurationLinker): Promise<Array<string>> {
     const allTournamentLinks = this.linkBuilder(howMuchBackward, configuration);
     return (await this.checkArrayOfLinks(allTournamentLinks)).filter(value => value !== null) as Array<string>;
   }
