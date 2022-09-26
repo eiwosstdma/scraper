@@ -1,9 +1,8 @@
 import { ScraperParserMtgo } from './scraper-parser.mtgo';
 
-describe('Testing ScraperParserMtgo', () => {
+describe('Testing ScraperParserMtgo function', () => {
   const scraper = new ScraperParserMtgo();
   const promisedData = scraper.run('https://magic.wizards.com/en/articles/archive/mtgo-standings/modern-preliminary-2022-09-15');
-
 
   test('Verify name, format and total players of metadata of the tournament.',  async () => {
     const data = await promisedData;
@@ -24,6 +23,6 @@ describe('Testing ScraperParserMtgo', () => {
     const data = await promisedData;
 
     expect(data?.finalDeckLists[6].owner).toEqual('boytriton');
-    expect(data?.finalDeckLists[6].owner).toEqual('boytriton');
+    expect(data?.finalDeckLists[6].point).toEqual(9);
   });
 });

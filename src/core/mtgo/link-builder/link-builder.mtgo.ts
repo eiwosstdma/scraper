@@ -10,8 +10,8 @@ import { JSDOM } from 'jsdom';
 /**
  * Application imports
  */
-import { ConfigurationLinker } from '../common.core';
-import { sleepUntil } from '../utilities.core';
+import { ConfigurationLinker } from '../../common.core';
+import { sleepUntil } from '../../utilities.core';
 
 /**
  * Initialisation

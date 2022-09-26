@@ -10,13 +10,13 @@ import { JSDOM } from 'jsdom';
 /**
  * Types
  */
-import { Deck, Format, LevelOfPlay, Tournament } from '../common.core';
+import { Deck, Format, LevelOfPlay, Tournament } from '../../common.core';
 
 /**
  * Application imports
  */
-import { generate12LString } from '../utilities.core';
-import { sleepUntil } from '../utilities.core';
+import { generate12LString } from '../../utilities.core';
+import { sleepUntil } from '../../utilities.core';
 
 /**
  * Initialisation
@@ -172,7 +172,7 @@ export class ScraperParserMtgo {
     }
   }
 
-  async run(url: string) {
+  async run(url: string): Promise<{ tournamentData: Tournament, finalDeckLists: Array<Deck> } | null> {
     const dataFromUrl = await this.getDataFromUrl(url);
     if (dataFromUrl !== null) {
       return await this.parseMtgo(dataFromUrl.name, dataFromUrl.data);

@@ -1,4 +1,4 @@
-import { Filter, Deck } from './common.core';
+import { Filter, Deck } from '../common.core';
 
 export const filtering = (deck: Deck, filter: Filter): Deck => {
   if (deck.format !== filter.format) return deck;
@@ -7,8 +7,8 @@ export const filtering = (deck: Deck, filter: Filter): Deck => {
   let excludingValue = 0;
 
   for (const card of deck.main) {
-    const isIncluded = filter.includes.find(value => value === card.name);
-    const isExcluded = filter.excludes.find(value => value === card.name);
+    const isIncluded = filter.includes.find(value => value.toLowerCase() === card.name.toLowerCase());
+    const isExcluded = filter.excludes.find(value => value.toLowerCase() === card.name.toLowerCase());
 
     if (isIncluded !== undefined) includingValue++;
     if (isExcluded !== undefined) excludingValue++;
