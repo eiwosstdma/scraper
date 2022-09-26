@@ -8,10 +8,13 @@ export const filtering = (deck: Deck, filter: Filter): Deck => {
 
   for (const card of deck.main) {
     const isIncluded = filter.includes.find(value => value.toLowerCase() === card.name.toLowerCase());
-    const isExcluded = filter.excludes.find(value => value.toLowerCase() === card.name.toLowerCase());
+    if (filter.excludes.length >= 1) {
+      const isExcluded = filter.excludes.find(value => value.toLowerCase() === card.name.toLowerCase());
+      if (isExcluded !== undefined) excludingValue++;
+
+    }
 
     if (isIncluded !== undefined) includingValue++;
-    if (isExcluded !== undefined) excludingValue++;
   }
 
   if (excludingValue >= 1) {
