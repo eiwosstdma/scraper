@@ -3,6 +3,10 @@
 > 
 > Only support MTGO scraping at the moment
 
+> **Warning**
+> 
+> Linker is now slower because of the risk to get ban for fast fetches.
+
 ### What to use ?
 <p>
   A simple data scraper available to be used within your own Node.js application,

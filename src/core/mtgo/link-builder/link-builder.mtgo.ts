@@ -55,7 +55,7 @@ export class LinkBuilderMtgo {
       const doc = new JSDOM(result).window.document;
 
       const isNotFound = doc.querySelector('.no-result');
-      await sleepUntil(100);
+      await sleepUntil(500);
       if (isNotFound?.textContent?.replace(/\s/g, '') !== 'noresultfound') {
         return link;
       } else return null;
