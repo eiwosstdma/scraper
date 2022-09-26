@@ -1,9 +1,9 @@
 /**
  * Export for libs usability
  */
-export { ScraperParserMtgo } from './core/mtgo/scraper-parser.mtgo';
-export { LinkBuilderMtgo } from './core/mtgo/link-builder.mtgo';
-export { filtering } from './core/filter.core';
+export { ScraperParserMtgo } from './core/mtgo/scraper-parser/scraper-parser.mtgo';
+export { LinkBuilderMtgo } from './core/mtgo/link-builder/link-builder.mtgo';
+export { filtering } from './core/filter/filter.core';
 export {
   Card,
   Filter,
