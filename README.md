@@ -38,7 +38,34 @@ OF THIS SOFTWARE.
   npm i mtg-scrapper
 ```
 ### Import it in your project
-```
-  import { LinkBuilderMtgo, ScraperParserMtgo } from 'mtg-scrapper';
-  import { Deck } from 'mtg-scrapper' 
+```typescript
+  import { 
+    Card, 
+    ConfigurationLinker, 
+    Deck, 
+    Filter, 
+    ICard, 
+    IConfigurationLinker, 
+    IDeck, 
+    IFilter, 
+    ITournament, 
+    TFormat, 
+    TLevelOfPlay, 
+    TOrganizer, 
+    TPlatform, 
+    Tournament, 
+    checkArrayOfLinks, 
+    checkLink, 
+    filtering, 
+    formatHelper, 
+    getDataFromUrl, 
+    guardGeneric, 
+    levelOfPlayHelper, 
+    linkBuilderRUN, 
+    linkGenerator, 
+    organizerHelper, 
+    parseMtgo, 
+    platformHelper, 
+    scraperParserRUN 
+  } from 'mtg-scrapper';
 ```
