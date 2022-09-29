@@ -51,10 +51,10 @@ export interface IConfigurationLinker {
   wantedLevel?: Array<TLevelOfPlay>;
 }
 
-export type TFormat = 'vintage' | 'legacy' | 'modern' | 'pioneer' | 'standard' | 'pauper';
+export type TFormat = 'unknown' | 'vintage' | 'legacy' | 'modern' | 'pioneer' | 'standard' | 'pauper';
 
-export type TPlatform = 'mtgo';
+export type TPlatform = 'mtgo' | 'unknown';
 
-export type TOrganizer = 'wizard';
+export type TOrganizer = 'wizard' | 'unknown';
 
-export type TLevelOfPlay = 'league' | 'preliminary' | 'challenge' | 'showcase-challenge' | 'super-qualifier' | 'premier';
+export type TLevelOfPlay = 'unknown' | 'league' | 'preliminary' | 'challenge' | 'showcase-challenge' | 'super-qualifier' | 'premier';
