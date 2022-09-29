@@ -10,7 +10,7 @@ import { JSDOM } from 'jsdom';
 /**
  * Application imports
  */
-import { ConfigurationLinker } from '../../common.core';
+import { IConfigurationLinker } from '../../types.core';
 import { sleepUntil } from '../../utilities.core';
 
 /**
@@ -18,59 +18,62 @@ import { sleepUntil } from '../../utilities.core';
  */
 
 /**
- * Class
+ * Functions
  */
-export class LinkBuilderMtgo {
-  protected linkBuilder(howManyDaysBackward: number, configuration?: ConfigurationLinker) {
-    const baseUrl = 'https://magic.wizards.com/en/articles/archive/mtgo-standings/';
-    const allFormat = configuration?.wantedFormat ?? [ 'vintage', 'legacy', 'modern', 'pioneer', 'pauper', 'standard' ];
-    const allLevel = configuration?.wantedLevel ?? [ 'league', 'preliminary', 'challenge', 'showcase-challenge', 'super-qualifier' ];
-    const currentDate = new Date();
-    const allLinksArray: Array<string> = [];
+export function linkGenerator(howManyDaysBackward: number, configuration?: IConfigurationLinker): Array<string> {
+  const baseUrl = 'https://magic.wizards.com/en/articles/archive/mtgo-standings/';
+  const allFormat = configuration?.wantedFormat ?? [ 'vintage', 'legacy', 'modern', 'pioneer', 'pauper', 'standard' ];
+  const allLevel = configuration?.wantedLevel ?? [ 'league', 'preliminary', 'challenge', 'showcase-challenge', 'super-qualifier' ];
+  const currentDate = new Date();
+  const allLinksArray: Array<string> = [];
 
-    for (let i = 0; i <= howManyDaysBackward; i++) {
-      const dateToScrap = new Date(currentDate.getTime() - (86400*1000) *i);
-      const dayToScrap = ((dateToScrap.getUTCDate() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCDate() + 1) : dateToScrap.getUTCDate() + 1;
-      const monthToScrap = ((dateToScrap.getUTCMonth() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCMonth() + 1) : dateToScrap.getUTCMonth() + 1;
-      const yearToScrap = dateToScrap.getUTCFullYear();
-      const dateToBeBuilt = `${ yearToScrap }-${ monthToScrap }-${ dayToScrap }`;
+  for (let i = 0; i <= howManyDaysBackward; i++) {
+    const dateToScrap = new Date(currentDate.getTime() - (86400*1000) *i);
+    const dayToScrap = ((dateToScrap.getUTCDate() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCDate() + 1) : dateToScrap.getUTCDate() + 1;
+    const monthToScrap = ((dateToScrap.getUTCMonth() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCMonth() + 1) : dateToScrap.getUTCMonth() + 1;
+    const yearToScrap = dateToScrap.getUTCFullYear();
+    const dateToBeBuilt = `${ yearToScrap }-${ monthToScrap }-${ dayToScrap }`;
 
-      const allLinks: Array<string> = [];
+    const allLinks: Array<string> = [];
 
-      allFormat.forEach(format => allLevel.forEach(level => {
-        const url = `${ baseUrl }${ format }-${ level }-${ dateToBeBuilt }`;
-        allLinks.push(url);
-      }));
+    allFormat.forEach(format => allLevel.forEach(level => {
+      const url = `${ baseUrl }${ format }-${ level }-${ dateToBeBuilt }`;
+      allLinks.push(url);
+    }));
 
-      allLinksArray.push(... allLinks);
-    }
-
-    return allLinksArray;
+    allLinksArray.push(... allLinks);
   }
 
-  protected async checkLink(link: string): Promise<string | null> {
-    try {
-      const data = await fetch(link);
-      const result = await data.text();
-      const doc = new JSDOM(result).window.document;
+  return allLinksArray;
+}
 
-      const isNotFound = doc.querySelector('.no-result');
-      await sleepUntil(500);
-      if (isNotFound?.textContent?.replace(/\s/g, '') !== 'noresultfound') {
-        return link;
-      } else return null;
-    } catch (err) {
-      console.log(err)
-      return null;
-    }
-  }
+export async function checkLink(link: string, timeOut?: number): Promise<string | null> {
+  try {
+    const data = await fetch(link);
+    const result = await data.text();
+    const doc = new JSDOM(result).window.document;
 
-  protected async checkArrayOfLinks(links: Array<string>) {
-    return Promise.all(links.map(link => this.checkLink(link)));
-  }
-
-  async run(howMuchBackward: number, configuration?: ConfigurationLinker): Promise<Array<string>> {
-    const allTournamentLinks = this.linkBuilder(howMuchBackward, configuration);
-    return (await this.checkArrayOfLinks(allTournamentLinks)).filter(value => value !== null) as Array<string>;
+    const isNotFound = doc.querySelector('.no-result');
+    await sleepUntil(timeOut ?? 500);
+    if (isNotFound?.textContent?.replace(/\s/g, '') !== 'noresultfound') {
+      return link;
+    } else return null;
+  } catch (err) {
+    console.log(err)
+    return null;
   }
 }
+
+export async function checkArrayOfLinks(links: Array<string>): Promise<(string | null)[]> {
+  return Promise.all(links.map(link => checkLink(link)));
+}
+
+export async function linkBuilderRUN(howMuchBackward: number, configuration?: IConfigurationLinker, arrOfLinks?: Array<string>): Promise<Array<string>> {
+  if (arrOfLinks) {
+    return (await checkArrayOfLinks(arrOfLinks)).filter(value => value !== null) as Array<string>;
+  } else {
+    const allTournamentLinks = linkGenerator(howMuchBackward, configuration);
+    return (await checkArrayOfLinks(allTournamentLinks)).filter(value => value !== null) as Array<string>;
+  }
+}
+
