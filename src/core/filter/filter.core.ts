@@ -1,7 +1,7 @@
-import { Filter, Deck } from '../common.core';
+import { IFilter, IDeck } from '../types.core';
 
-export const filtering = (deck: Deck, filter: Filter): Deck => {
-  if (deck.format !== filter.format) return deck;
+export const filtering = (deck: IDeck, filter: IFilter): IFilter['name'] | null => {
+  if (deck.format !== filter.format) return null;
 
   let includingValue = 0;
   let excludingValue = 0;
@@ -18,13 +18,13 @@ export const filtering = (deck: Deck, filter: Filter): Deck => {
   }
 
   if (excludingValue >= 1) {
-    return deck;
+    return filter.name;
   }
 
   if (includingValue >= 2) {
     deck.name = filter.name;
-    return deck;
+    return filter.name;
   }
 
-  return deck;
+  return filter.name;
 };
