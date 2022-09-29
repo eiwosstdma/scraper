@@ -15,6 +15,18 @@ export {
   TOrganizer,
   TLevelOfPlay
 } from './core/types.core';
+export {
+  guardGeneric,
+  formatHelper,
+  platformHelper,
+  organizerHelper,
+  levelOfPlayHelper,
+  Card,
+  Filter,
+  Deck,
+  Tournament,
+  ConfigurationLinker
+} from './core/definitions.core'
 
 /**
  * Tournament scraping: Around 1 second
