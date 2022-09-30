@@ -35,9 +35,7 @@ export class Filter implements IFilter{
   includes: Array<string>;
   excludes: Array<string>;
 
-  constructor(args: any) {
-    if (!(args instanceof Object)) throw new TypeError('Argument is not of type Object');
-
+  constructor(args: any | IFilter) {
     const isFormat = guardGeneric<TFormat>(args.format, formatHelper);
     this.format = isFormat === null ? 'unknown' : isFormat;
     this.name = args.name ?? 'unknown';
