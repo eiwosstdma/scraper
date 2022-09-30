@@ -13,7 +13,7 @@ export const generate12LString = () => {
 
 export const sleepUntil = promisify(setTimeout);
 
-export const typeGuard = <T>(unknownObj: unknown, knownObj: T, howMuchItNeedsToCompare: number): T | null => {
+export const guardClassGeneric = <T>(unknownObj: unknown, knownObj: T, howMuchItNeedsToCompare: number): T | null => {
   if (!(unknownObj instanceof Object)) return null;
   if (!(knownObj instanceof Object)) throw new TypeError('typeGuard Function: Should be of type object');
 
@@ -28,4 +28,12 @@ export const typeGuard = <T>(unknownObj: unknown, knownObj: T, howMuchItNeedsToC
 
   if (isFoundEqually >= howMuchItNeedsToCompare) return unknownObj as T;
   else return null;
+};
+
+export const guardGeneric = <T>(unk: any, typeInArr: Array<T>): T | null => {
+  if (typeof unk !== 'string') return null;
+
+  const isAlive = typeInArr.find(v => v === unk);
+
+  return isAlive === undefined ? null : isAlive as T;
 };

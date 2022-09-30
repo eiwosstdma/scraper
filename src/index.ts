@@ -16,7 +16,6 @@ export {
   TLevelOfPlay
 } from './core/types.core';
 export {
-  guardGeneric,
   formatHelper,
   platformHelper,
   organizerHelper,
@@ -26,7 +25,11 @@ export {
   Deck,
   Tournament,
   ConfigurationLinker
-} from './core/definitions.core'
+} from './core/definitions.core';
+export {
+  guardGeneric,
+  guardClassGeneric
+} from './core/utilities.core';
 
 /**
  * Tournament scraping: Around 1 second
