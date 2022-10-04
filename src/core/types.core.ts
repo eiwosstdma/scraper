@@ -58,3 +58,4 @@ export type TPlatform = 'mtgo' | 'unknown';
 export type TOrganizer = 'wizard' | 'unknown';
 
 export type TLevelOfPlay = 'unknown' | 'league' | 'preliminary' | 'challenge' | 'showcase-challenge' | 'super-qualifier' | 'premier';
+

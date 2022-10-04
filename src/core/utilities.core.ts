@@ -7,9 +7,7 @@ import { promisify } from 'node:util';
 /**
  * Application
  */
-export const generate12LString = () => {
-  return randomBytes(6).toString('hex');
-};
+export const generate12LString = () => randomBytes(6).toString('hex');
 
 export const sleepUntil = promisify(setTimeout);
 
@@ -30,7 +28,7 @@ export const guardClassGeneric = <T>(unknownObj: unknown, knownObj: T, howMuchIt
   else return null;
 };
 
-export const guardGeneric = <T>(unk: any, typeInArr: Array<T>): T | null => {
+export const guardGeneric = <T>(unk: any, typeInArr: Readonly<Array<T>> ): T | null => {
   if (typeof unk !== 'string') return null;
 
   const isAlive = typeInArr.find(v => v === unk);
