@@ -1,12 +1,24 @@
-import { ICard, IFilter, IDeck, ITournament, IConfigurationLinker, TFormat, TPlatform, TOrganizer, TLevelOfPlay } from './types.core';
+import {
+  ICard,
+  IFilter,
+  IDeck,
+  ITournament,
+  IConfigurationLinker,
+  TFormat,
+  TPlatform,
+  TOrganizer,
+  TLevelOfPlay,
+  AHelperFormat,
+  AHelperPlatform,
+  AHelperOrganizer,
+  AHelperLevel
+} from './types.core';
+
 import { guardGeneric } from './utilities.core';
-//Guards
-
-
-export const formatHelper: Array<TFormat> = [ 'vintage', 'legacy', 'modern', 'pioneer', 'standard', 'pauper' ];
-export const platformHelper: Array<TPlatform> = [ 'mtgo' ];
-export const organizerHelper: Array<TOrganizer> = [ 'wizard' ];
-export const levelOfPlayHelper: Array<TLevelOfPlay> = [ 'league', 'preliminary', 'challenge', 'showcase-challenge', 'super-qualifier', 'premier' ];
+const formatHelper = AHelperFormat;
+const platformHelper = AHelperPlatform;
+const organizerHelper = AHelperOrganizer;
+const levelOfPlayHelper = AHelperLevel;
 
 //Definition
 export class Card implements ICard {

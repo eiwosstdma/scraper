@@ -51,11 +51,14 @@ export interface IConfigurationLinker {
   wantedLevel?: Array<TLevelOfPlay>;
 }
 
-export type TFormat = 'unknown' | 'vintage' | 'legacy' | 'modern' | 'pioneer' | 'standard' | 'pauper';
+export const AHelperFormat = [ 'unknown', 'vintage', 'legacy', 'modern', 'pioneer', 'standard', 'pauper' ] as const;
+export type TFormat = typeof AHelperFormat[number];
 
-export type TPlatform = 'mtgo' | 'unknown';
+export const AHelperPlatform = [ 'unknown', 'mtgo' ] as const;
+export type TPlatform = typeof AHelperPlatform[number];
 
-export type TOrganizer = 'wizard' | 'unknown';
+export const AHelperOrganizer = [ 'unknown', 'wizard' ] as const;
+export type TOrganizer = typeof AHelperOrganizer[number];
 
-export type TLevelOfPlay = 'unknown' | 'league' | 'preliminary' | 'challenge' | 'showcase-challenge' | 'super-qualifier' | 'premier';
-
+export const AHelperLevel = [ 'unknown', 'league', 'preliminary', 'challenge', 'showcase-challenge', 'super-qualifier', 'premier' ] as const;
+export type TLevelOfPlay = typeof AHelperLevel[number];
