@@ -15,7 +15,7 @@ import { IDeck, TFormat, TLevelOfPlay, ITournament } from '../../types.core';
 /**
  * Application imports
  */
-import { generate12LString } from '../../utilities.core';
+import { generate12LString, customFetch } from '../../utilities.core';
 import { sleepUntil } from '../../utilities.core';
 
 /**
@@ -104,8 +104,7 @@ export async function getDataFromUrl(url: string): Promise<null | { name: string
   const randomHex = generate12LString();
 
     try {
-      const fetched = await fetch(url);
-      const data = await fetched.text();
+      const data = await customFetch(url);
       await sleepUntil(100);
 
       const fileName = `mtgo.${ endPart }.${ randomHex }.html`;

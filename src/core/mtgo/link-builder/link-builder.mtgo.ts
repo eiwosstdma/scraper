@@ -11,7 +11,7 @@ import { JSDOM } from 'jsdom';
  * Application imports
  */
 import { IConfigurationLinker } from '../../types.core';
-import { sleepUntil } from '../../utilities.core';
+import { sleepUntil, customFetch } from '../../utilities.core';
 
 /**
  * Initialisation
@@ -47,14 +47,13 @@ export function linkGenerator(howManyDaysBackward: number, configuration?: IConf
   return allLinksArray;
 }
 
-export async function checkLink(link: string, timeOut?: number): Promise<string | null> {
+export async function checkLink(link: string, awaitFor?: number): Promise<string | null> {
   try {
-    const data = await fetch(link);
-    const result = await data.text();
+    const result = await customFetch(link);
     const doc = new JSDOM(result).window.document;
 
     const isNotFound = doc.querySelector('.no-result');
-    await sleepUntil(timeOut ?? 500);
+    await sleepUntil(awaitFor ?? 500);
     if (isNotFound?.textContent?.replace(/\s/g, '') !== 'noresultfound') {
       return link;
     } else return null;
@@ -65,7 +64,7 @@ export async function checkLink(link: string, timeOut?: number): Promise<string 
 }
 
 export async function checkArrayOfLinks(links: Array<string>): Promise<(string | null)[]> {
-  return Promise.all(links.map(link => checkLink(link)));
+  return Promise.all(links.map(link => checkLink(link, 600)));
 }
 
 export async function linkBuilderRUN(howMuchBackward: number, configuration?: IConfigurationLinker, arrOfLinks?: Array<string>): Promise<Array<string>> {

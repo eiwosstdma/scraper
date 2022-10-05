@@ -3,8 +3,7 @@
  */
 import { randomBytes } from 'node:crypto';
 import { promisify } from 'node:util';
-import { get } from 'node:http';
-import { EventEmitter } from 'node:events';
+import { get } from 'node:https';
 
 /**
  * Application
