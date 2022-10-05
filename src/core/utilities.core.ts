@@ -32,7 +32,6 @@ export const sleepUntil = promisify(setTimeout);
 
 export const guardGeneric = <T>(unk: any, typeInArr: Readonly<Array<string>>): T | null => {
   if (typeof unk !== 'string') return null;
-
   // const isAlive = typeInArr.find(v => v === unk);
   let isAlive;
   typeInArr.forEach(item => {
