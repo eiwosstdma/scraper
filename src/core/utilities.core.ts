@@ -3,6 +3,8 @@
  */
 import { randomBytes } from 'node:crypto';
 import { promisify } from 'node:util';
+import { get } from 'node:http';
+import { EventEmitter } from 'node:events';
 
 /**
  * Application
@@ -42,4 +44,20 @@ export const guardGeneric = <T>(unk: any, typeInArr: Readonly<Array<string>>): T
   });
 
   return isAlive === undefined ? null : isAlive as T;
+};
+
+export const customFetch = (url: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    get(url, (res) => {
+      res.on('error', err => reject(new Error('URL IS NOT VALID.')));
+
+      if (res.statusCode === undefined || (res.statusCode <= 200 && res.statusCode >= 299)) {
+        return reject(new Error(`Request failed. Status code => ${ res.statusCode ?? 'Not defined' }`));
+      } else {
+        let rawData = '';
+        res.on('data', data => rawData += data);
+        res.on('end', () => resolve(rawData as string));
+      }
+    });
+  });
 };
