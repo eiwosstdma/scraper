@@ -47,6 +47,32 @@ export function linkGenerator(howManyDaysBackward: number, configuration?: IConf
   return allLinksArray;
 }
 
+export function generateLinksFrom(fromTheDay: number, configuration?: IConfigurationLinker): Array<string> {
+  const baseUrl = 'https://magic.wizards.com/en/articles/archive/mtgo-standings/';
+  const allFormat = configuration?.wantedFormat ?? [ 'vintage', 'legacy', 'modern', 'pioneer', 'pauper', 'standard' ];
+  const allLevel = configuration?.wantedLevel ?? [ 'league', 'preliminary', 'challenge', 'showcase-challenge', 'super-qualifier' ];
+
+  const allLinksArray: Array<string> = [];
+
+  const dateToScrap = new Date(fromTheDay);
+  const dayToScrap = ((dateToScrap.getUTCDate() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCDate() + 1) : dateToScrap.getUTCDate() + 1;
+  const monthToScrap = ((dateToScrap.getUTCMonth() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCMonth() + 1) : dateToScrap.getUTCMonth() + 1;
+  const yearToScrap = dateToScrap.getUTCFullYear();
+  const dateToBeBuilt = `${ yearToScrap }-${ monthToScrap }-${ dayToScrap }`;
+
+  const allLinks: Array<string> = [];
+
+  allFormat.forEach(format => allLevel.forEach(level => {
+    const url = `${ baseUrl }${ format }-${ level }-${ dateToBeBuilt }`;
+    allLinks.push(url);
+  }));
+
+  allLinksArray.push(... allLinks);
+
+
+  return allLinksArray;
+}
+
 export async function checkLink(link: string, awaitFor?: number): Promise<string | null> {
   try {
     const result = await customFetch(link);

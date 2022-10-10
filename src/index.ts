@@ -9,6 +9,7 @@ export {
 
 export {
   linkGenerator,
+  generateLinksFrom,
   checkLink,
   checkArrayOfLinks,
   linkBuilderRUN
@@ -42,8 +43,3 @@ export {
 export {
   guardGeneric,
 } from './core/utilities.core';
-
-/**
- * Tournament scraping: Around 1 second
- * Link for a day: Around 2 seconds
- */
