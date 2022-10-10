@@ -20,6 +20,20 @@ import { sleepUntil, customFetch } from '../../utilities.core';
 /**
  * Functions
  */
+export function timeIntoDate(dayInMilli?: number) {
+  const dateTo = new Date(dayInMilli ?? new Date().getTime());
+
+  const month = (dateTo.getUTCMonth() + 1).toString();
+  const day = dateTo.getUTCDate().toString();
+
+  const theYear = dateTo.getFullYear();
+  const theMonth = month.length === 1 ? '0' + month : month;
+  const theDay = day.length === 1 ? '0' + day : day;
+
+
+  return `${theYear}-${theMonth}-${theDay}`;
+}
+
 export function linkGenerator(howManyDaysBackward: number, configuration?: IConfigurationLinker): Array<string> {
   const baseUrl = 'https://magic.wizards.com/en/articles/archive/mtgo-standings/';
   const allFormat = configuration?.wantedFormat ?? [ 'vintage', 'legacy', 'modern', 'pioneer', 'pauper', 'standard' ];
@@ -29,10 +43,7 @@ export function linkGenerator(howManyDaysBackward: number, configuration?: IConf
 
   for (let i = 0; i <= howManyDaysBackward; i++) {
     const dateToScrap = new Date(currentDate.getTime() - (86400*1000) *i);
-    const dayToScrap = ((dateToScrap.getUTCDate() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCDate() + 1) : dateToScrap.getUTCDate() + 1;
-    const monthToScrap = ((dateToScrap.getUTCMonth() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCMonth() + 1) : dateToScrap.getUTCMonth() + 1;
-    const yearToScrap = dateToScrap.getUTCFullYear();
-    const dateToBeBuilt = `${ yearToScrap }-${ monthToScrap }-${ dayToScrap }`;
+    const dateToBeBuilt = timeIntoDate(dateToScrap.getTime());
 
     const allLinks: Array<string> = [];
 
@@ -55,10 +66,7 @@ export function generateLinksFrom(fromTheDay: number, configuration?: IConfigura
   const allLinksArray: Array<string> = [];
 
   const dateToScrap = new Date(fromTheDay);
-  const dayToScrap = ((dateToScrap.getUTCDate() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCDate() + 1) : dateToScrap.getUTCDate() + 1;
-  const monthToScrap = ((dateToScrap.getUTCMonth() + 1).toString().length === 1) ? '0' + (dateToScrap.getUTCMonth() + 1) : dateToScrap.getUTCMonth() + 1;
-  const yearToScrap = dateToScrap.getUTCFullYear();
-  const dateToBeBuilt = `${ yearToScrap }-${ monthToScrap }-${ dayToScrap }`;
+  const dateToBeBuilt = timeIntoDate(dateToScrap.getTime());
 
   const allLinks: Array<string> = [];
 
