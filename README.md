@@ -1,59 +1,46 @@
 # Mtg data Scrape
-> **Note**
-> 
-> Only support MTGO scraping at the moment
-
-> **Warning**
-> 
-> Linker is now slower because of the risk to get ban for fast fetches.
-
-### What to use ?
-<p>
-  REWRITING THE DOC
-</p>
 
 ## How to use ?
 > **Warning**
 >
-> Works only with Node >= 18.0.0 (fetch usage)
+> DOC IS NOT WROTE YET
 
-### Install it
+## Install it
 ```powershell
   npm i mtg-scrapper
 ```
-### Import it in your project
+## API DOCUMENTATION
+### Filters
 ```typescript
-  import { 
-    Card, 
-    ConfigurationLinker, 
-    Deck, 
-    Filter, 
-    ICard, 
-    IConfigurationLinker, 
-    IDeck, 
-    IFilter, 
-    ITournament, 
-    TFormat, 
-    TLevelOfPlay, 
-    TOrganizer, 
-    TPlatform, 
-    Tournament, 
-    checkArrayOfLinks, 
-    checkLink, 
-    filtering, 
-    formatHelper, 
-    getDataFromUrl, 
-    guardGeneric, 
-    levelOfPlayHelper, 
-    linkBuilderRUN, 
-    linkGenerator, 
-    organizerHelper, 
-    parseMtgo, 
-    platformHelper, 
-    scraperParserRUN 
-  } from 'mtg-scrapper';
+/**
+ * Compare a instance of Deck against a given filter and output either the name for the deck if the filter do apply or null.
+ */
+interface filtering {
+  (deck: IDeck, filter: IFilter): IFilter['name'] | null;
+}
 ```
-### ISC License
+
+### Link Generators - MTGO (Probably will be the same API for other websites)
+```typescript
+/**
+ * Create links without checking them, for a given configuration and a number of days.
+ * It will cumulates tournaments within the array, starting from the current day through the number of days you specified.
+ */
+interface linkGenerator{
+  (days: number, configuration?: IConfigurationLinker): Array<string>;
+}
+```
+```typescript
+/**
+ * Create links without checking them, for a given configuration and a day in milmiseconds. (Date().getTime())
+ * It does not cumulate the result if you specify and old day, but generate only links for the day.
+ */
+interface generateLinksFrom {
+  (dayToScrap: number, configuration?: IConfigurationLinker): Array<string>;
+}
+```
+
+## ISC License
 
 <p>
 Permission to use, copy, modify, and/or distribute this software for any purpose 
