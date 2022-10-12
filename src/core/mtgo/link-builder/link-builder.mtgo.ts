@@ -97,8 +97,8 @@ export async function checkLink(link: string, awaitFor?: number): Promise<string
   }
 }
 
-export async function checkArrayOfLinks(links: Array<string>): Promise<(string | null)[]> {
-  return Promise.all(links.map(link => checkLink(link, 600)));
+export async function checkArrayOfLinks(links: Array<string>, awaitFor?: number): Promise<(string | null)[]> {
+  return Promise.all(links.map(link => checkLink(link, awaitFor ?? 500)));
 }
 
 export async function linkBuilderRUN(howMuchBackward: number, configuration?: IConfigurationLinker, arrOfLinks?: Array<string>): Promise<Array<string>> {
