@@ -13,7 +13,8 @@
 ### Filters
 ```typescript
 /**
- * Compare a instance of Deck against a given filter and output either the name for the deck if the filter do apply or null.
+ * Compare a instance of Deck against a given filter 
+ * and output either the name for the deck if the filter do apply or null.
  */
 interface filtering {
   (deck: IDeck, filter: IFilter): IFilter['name'] | null;
@@ -23,8 +24,10 @@ interface filtering {
 ### Link Generators - MTGO (Probably will be the same API for other websites)
 ```typescript
 /**
- * Create links without checking them, for a given configuration and a number of days.
- * It will cumulates tournaments within the array, starting from the current day through the number of days you specified.
+ * Create links without checking them, 
+ * for a given configuration and a number of days.
+ * It will cumulates tournaments within the array, 
+ * starting from the current day through the number of days you specified.
  */
 interface linkGenerator{
   (days: number, configuration?: IConfigurationLinker): Array<string>;
@@ -32,8 +35,10 @@ interface linkGenerator{
 ```
 ```typescript
 /**
- * Create links without checking them, for a given configuration and a day in milmiseconds. (Date().getTime())
- * It does not cumulate the result if you specify and old day, but generate only links for the day.
+ * Create links without checking them, 
+ * for a given configuration and a day in milmiseconds.
+ * It does not cumulate the result if you specify and old day, 
+ * but generate only links for the day.
  */
 interface generateLinksFrom {
   (dayToScrap: number, configuration?: IConfigurationLinker): Array<string>;
