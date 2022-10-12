@@ -10,6 +10,10 @@
   npm i mtg-scrapper
 ```
 ## API DOCUMENTATION
+<p>
+  All functions are described with interfaces.
+</p>
+
 ### Filters
 ```typescript
 /**
@@ -42,6 +46,27 @@ interface linkGenerator{
  */
 interface generateLinksFrom {
   (dayToScrap: number, configuration?: IConfigurationLinker): Array<string>;
+}
+```
+```typescript
+/**
+ * Check if the link you give is a valid tournament link, 
+ * it will await the time you've given in arguments if needed, 
+ * if you have ton of links to check, 
+ * it's better to make it await at least a second for each linl,
+ * to not flood the given website.
+ */
+interface checkLink {
+  (link: string, awaitFor?: number): Promise<string | null>
+}
+```
+```typescript
+/**
+ * The same thing that checkLink but check a big array, 
+ * return good links and null for links that are not valid.
+ */
+interface checkArrayOfLinks {
+  (links: Array<stirng>, awaitFor?: number): Promise<Array<string | null>>;
 }
 ```
 
