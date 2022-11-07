@@ -8,6 +8,7 @@ import { get } from 'node:https';
 /**
  * Application
  */
+export const baseURLMTGO = () => 'https://www.mtgo.com/en/mtgo/decklist/';
 
 export const generate12LString = () => {
   return randomBytes(5).toString('hex');
