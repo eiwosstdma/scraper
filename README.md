@@ -5,12 +5,13 @@
 # Mtg data Scraper
 ## What is that ?
 « mtg-scrapper » (Yes, its « scraper » and not « scrapper », but too late now) is a tiny MTG data scraper/builder
-to gather information of competitive tournaments related to MTG:Online, and some other sources.
+to gather information of competitive tournaments related to MTG:Online, and some other data sources.
 
-It aims to be « lightweight » and « modular » to give you granular control over it and its
-behavior, yet easy to use with start-to-data process.
+It aims to be « lightweight » and « modular » to give you a granular control over it and its
+behavior. <br> Yet it is easy to use, with some start-to-data process/functions for users 
+who just want to start quickly with it.
 
-It's open source and free to use, as mentioned in the [ISC license](#ISC-License).
+It's open source and free, as mentioned in the [ISC license](#ISC-License).
 
 <br><br><hr>
 
@@ -20,9 +21,9 @@ It's open source and free to use, as mentioned in the [ISC license](#ISC-License
   npm i mtg-scrapper
 ```
 ### How to start with it
-You can « custom » your experience with it by just importing functions you need. Though,
-you may want to start quickly with it, and you need just big output of data without the need
-of granularity.
+It's a modular system, you can import only the function you need if you want.
+Though, if you just need to get data quickly without worrying about the API,
+just follow here;
 
 To get data of the current day, just do that;
 ```typescript

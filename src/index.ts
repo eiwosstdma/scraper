@@ -4,7 +4,8 @@
 export {
   getDataFromUrl,
   parseMtgo,
-  scraperParserRUN
+  scraperParserRUN,
+  dataOfTheDay
 } from './core/mtgo/scraper-parser/scraper-parser.mtgo';
 
 export {
