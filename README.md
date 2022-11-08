@@ -3,12 +3,31 @@
 ## How to use ?
 > **Warning**
 >
-> DOC IS NOT WROTE YET
+> DOCUMENTATION IS NOT FULLY WRITTEN YET
 
-## Install it
+### Install it
 ```powershell
   npm i mtg-scrapper
 ```
+### How to start with it
+You can « custom » your experience with it by just importing functions you need. Though,
+you may want to start quickly with it, and you need just big output of data without the need
+of granularity.
+
+To get data of the current day, just do that;
+```typescript
+import { dataOfTheDay } from 'mtg-scrapper';
+
+/**
+ * You can give a configuration to specify formats and type of events,
+ * By default, everything competitive mtgo format & events are scraped.
+ */
+
+const bulk = await dataOfTheDay();
+```
+The data is an array containing the metadata of each tournament and deck lists of the tournament.
+
+
 ## API DOCUMENTATION
 <p>
   All functions are described with interfaces.
