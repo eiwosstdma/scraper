@@ -10,13 +10,14 @@ import { JSDOM } from 'jsdom';
 /**
  * Types
  */
-import { IDeck, TFormat, TLevelOfPlay, ITournament } from '../../types.core';
+import { IDeck, TFormat, TLevelOfPlay, ITournament, IConfigurationLinker } from '../../types.core';
 
 /**
  * Application imports
  */
 import { generate12LString, customFetch } from '../../utilities.core';
 import { sleepUntil } from '../../utilities.core';
+import { generateLinksFrom } from '../link-builder/link-builder.mtgo';
 
 /**
  * Initialisation
@@ -175,4 +176,10 @@ export async function scraperParserRUN(url: string): Promise<{ tournamentData: I
   if (dataFromUrl !== null) {
     return await parseMtgo(dataFromUrl.name, dataFromUrl.data);
   } else return null;
+}
+
+export async function dataOfTheDay(configuration?: IConfigurationLinker): Promise<({tournamentData: ITournament, finalDeckLists: IDeck[]} | null)[]> {
+  const links = generateLinksFrom(Date.now(), configuration);
+  const awaitedBulkData = links.map(link => scraperParserRUN(link));
+  return Promise.all(awaitedBulkData);
 }
