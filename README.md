@@ -1,10 +1,20 @@
-# Mtg data Scrape
-
-## How to use ?
 > **Warning**
 >
 > DOCUMENTATION IS NOT FULLY WRITTEN YET
 
+# Mtg data Scraper
+## What is that ?
+« mtg-scrapper » (Yes, its « scraper » and not « scrapper », but too late now) is a tiny MTG data scraper/builder
+to gather information of competitive tournaments related to MTG:Online, and some other sources.
+
+It aims to be « lightweight » and « modular » to give you granular control over it and its
+behavior, yet easy to use with start-to-data process.
+
+It's open source and free to use, as mentioned in the [ISC license](#ISC-License).
+
+<br><br><hr>
+
+## How to use ?
 ### Install it
 ```powershell
   npm i mtg-scrapper
@@ -27,22 +37,19 @@ const bulk = await dataOfTheDay();
 ```
 The data is an array containing the metadata of each tournament and deck lists of the tournament.
 
+<br><br><br><hr>
 
 ## API DOCUMENTATION
-<p>
-  All functions are described with interfaces.
-</p>
+Functions and Classes are described as Interface.
 
 ### Filters
 ```typescript
-/**
- * Compare a instance of Deck against a given filter 
- * and output either the name for the deck if the filter do apply or null.
- */
 interface filtering {
   (deck: IDeck, filter: IFilter): IFilter['name'] | null;
 }
 ```
+It will return the correct for the deck you passed in parameter. If nothing correspond,
+it returns the string 'unknown'.
 
 ### Link Generators - MTGO (Probably will be the same API for other websites)
 ```typescript
