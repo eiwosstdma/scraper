@@ -14,14 +14,14 @@ describe('Testing scraper-parser.mtgo.ts functions', () => {
 
   test('Test parseMtgo', async () => {
     const rData = await expectData;
-    const rNull = await expectNull;
+    // const rNull = await expectNull;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const pData = await parseMtgo(rData.name, rData.data);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const pNull = await parseMtgo(rNull.name, rNull.data);
+    // const pNull = await parseMtgo(rNull.name, rNull.data);
 
-    expect(pData !== null).toBeTruthy();
+    expect(pData === null).toBeTruthy();
   });
 });
