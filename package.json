@@ -1,6 +1,6 @@
 {
   "name": "mtg-scrapper",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Tiny scraper for mtg open results.",
   "repository": "https://github.com/eiwosstdma/scraper",
   "author": "eiwosstdma <eiwos.studio@gmail.com>",
@@ -13,7 +13,7 @@
   "main": "./dist/index.js",
   "private": false,
   "engines": {
-    "node": ">= 18.0.0"
+    "node": ">= 18.10.0"
   },
   "scripts": {
     "start": "node ./dist/index.js",
