@@ -92,7 +92,7 @@ export async function checkLink(link: string, awaitFor?: number): Promise<string
       return link;
     } else return null;
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return null;
   }
 }

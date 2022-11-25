@@ -3,12 +3,11 @@
  */
 import { JSDOM } from 'jsdom';
 import { baseURLMTGODeckLists, customFetch } from '../../utilities.core';
-import { IConfigurationLinker } from '../../types.core';
 
 /**
  * Exports
  */
-export const getDataFromYearMonth = async (monthInNumber?: number, yearInNumber?: number) => {
+export const getDataFromYearMonth = async (monthInNumber?: number, yearInNumber?: number): Promise<string> => {
   const month = monthInNumber ?? (new Date().getMonth()) +1;
   const year = yearInNumber ?? new Date().getFullYear();
 

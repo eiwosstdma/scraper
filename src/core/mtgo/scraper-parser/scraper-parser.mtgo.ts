@@ -57,7 +57,7 @@ function createDeckData (element: Element): Pick<IDeck, 'name' | 'subId' | 'main
   const subIdName = element.getAttribute('subid');
 
   const textDeckList = element.querySelectorAll('div.toggle-text.toggle-subnav > div.deck-list-text > div.sorted-by-overview-container.sortedContainer > div.clearfix.element > span.row');
-  let mainDeck = [];
+  const mainDeck = [];
   for (const text of textDeckList) {
     const newObj = {
       quantity: Number(text.children[0].innerHTML),
@@ -68,7 +68,7 @@ function createDeckData (element: Element): Pick<IDeck, 'name' | 'subId' | 'main
   }
 
   const sideDeckList = element.querySelectorAll('div.toggle-text.toggle-subnav > div.deck-list-text > div.sorted-by-sideboard-container.clearfix.element > span.row');
-  let sideDeck = [];
+  const sideDeck = [];
   for (const text of sideDeckList) {
     const newObj = {
       quantity: Number(text.getElementsByClassName('card-count')[0].innerHTML),
@@ -86,7 +86,7 @@ function createDeckData (element: Element): Pick<IDeck, 'name' | 'subId' | 'main
     subId: subIdName as string,
     main: mainDeck,
     side: sideDeck
-  }
+  };
 }
 
 function createMetaData (metaData: Element): Pick<IDeck, 'rank' | 'point' | 'omwp' | 'gwp' | 'ogwp'> {
@@ -96,7 +96,7 @@ function createMetaData (metaData: Element): Pick<IDeck, 'rank' | 'point' | 'omw
     omwp: metaData.children[3].innerHTML,
     gwp: metaData.children[4].innerHTML,
     ogwp: metaData.children[5].innerHTML
-  }
+  };
 }
 
 export async function getDataFromUrl(url: string): Promise<null | { name: string, data: string }> {
@@ -104,20 +104,20 @@ export async function getDataFromUrl(url: string): Promise<null | { name: string
   const endPart = urlArrSegment[urlArrSegment.length - 1];
   const randomHex = generate12LString();
 
-    try {
-      const data = await customFetch(url);
-      await sleepUntil(100);
+  try {
+    const data = await customFetch(url);
+    await sleepUntil(100);
 
-      const fileName = `mtgo.${ endPart }.${ randomHex }.html`;
+    const fileName = `mtgo.${ endPart }.${ randomHex }.html`;
 
-      return {
-        name: fileName,
-        data
-      }
-    } catch(err) {
-      console.log(err);
-      return null;
-    }
+    return {
+      name: fileName,
+      data
+    };
+  } catch(err) {
+    console.log(err);
+    return null;
+  }
 }
 
 export async function parseMtgo (name: string, content: string): Promise<null | { tournamentData: ITournament, finalDeckLists: Array<IDeck> }> {
@@ -125,8 +125,9 @@ export async function parseMtgo (name: string, content: string): Promise<null | 
     const data = new JSDOM(content).window.document;
 
     const allDeckLists = Array.from(data.querySelectorAll('.deck-group'));
-    const dateFromADecklist = data.querySelector("div.title-deckicon > span.deck-meta");
+    const dateFromADecklist = data.querySelector('div.title-deckicon > span.deck-meta');
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const currentDatePlayed = dateFromADecklist.children[1].textContent.split(' ').join('').split('on').reverse()[0].replaceAll('/', '-');
 
@@ -138,7 +139,7 @@ export async function parseMtgo (name: string, content: string): Promise<null | 
     let finalDeckLists: Array<IDeck>;
 
     if (tournamentData.levelOfPlay !== 'league') {
-      const allMetaData = data.querySelector("table.sticky-enabled") as Element;
+      const allMetaData = data.querySelector('table.sticky-enabled') as Element;
       const tBody = Array.from(allMetaData.lastElementChild?.querySelectorAll('tr') as NodeListOf<HTMLTableRowElement>);
       const finalMetaData = tBody.map(data => createMetaData(data));
       finalDeckLists = players.map((value, index) => {
@@ -148,7 +149,7 @@ export async function parseMtgo (name: string, content: string): Promise<null | 
           tournamentName: tournamentData.name,
           playedAt: tournamentData.playedAt,
           format: tournamentData.format
-        }
+        };
       });
     } else {
       finalDeckLists = players.map((data) => {
@@ -157,14 +158,14 @@ export async function parseMtgo (name: string, content: string): Promise<null | 
           tournamentName: tournamentData.name,
           playedAt: tournamentData.playedAt,
           format: tournamentData.format
-        }
+        };
       });
     }
 
     return {
       tournamentData,
       finalDeckLists
-    }
+    };
   } catch(err) {
     console.log(err);
     return null;
