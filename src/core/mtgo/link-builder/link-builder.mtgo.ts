@@ -11,7 +11,7 @@ import { JSDOM } from 'jsdom';
  * Application imports
  */
 import { IConfigurationLinker } from '../../types.core';
-import { sleepUntil, customFetch, baseURLMTGO } from '../../utilities.core';
+import { sleepUntil, customFetch, baseURLMTGOWebsite } from '../../utilities.core';
 
 /**
  * Initialisation
@@ -35,7 +35,7 @@ export function timeIntoDate(dayInMilli?: number) {
 }
 
 export function linkGenerator(howManyDaysBackward: number, configuration?: IConfigurationLinker): Array<string> {
-  const baseUrl = baseURLMTGO();
+  const baseUrl = baseURLMTGOWebsite();
   const allFormat = configuration?.wantedFormat ?? [ 'vintage', 'legacy', 'modern', 'pioneer', 'pauper', 'standard' ];
   const allLevel = configuration?.wantedLevel ?? [ 'league', 'preliminary', 'challenge', 'showcase-challenge', 'super-qualifier' ];
   const currentDate = new Date();
@@ -59,7 +59,7 @@ export function linkGenerator(howManyDaysBackward: number, configuration?: IConf
 }
 
 export function generateLinksFrom(fromTheDay: number, configuration?: IConfigurationLinker): Array<string> {
-  const baseUrl = baseURLMTGO();
+  const baseUrl = baseURLMTGOWebsite();
   const allFormat = configuration?.wantedFormat ?? [ 'vintage', 'legacy', 'modern', 'pioneer', 'pauper', 'standard' ];
   const allLevel = configuration?.wantedLevel ?? [ 'league', 'preliminary', 'challenge', 'showcase-challenge', 'super-qualifier' ];
 

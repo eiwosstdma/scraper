@@ -1,6 +1,6 @@
 {
   "name": "mtg-scrapper",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Tiny scraper for mtg open results.",
   "repository": "https://github.com/eiwosstdma/scraper",
   "author": "eiwosstdma <eiwos.studio@gmail.com>",

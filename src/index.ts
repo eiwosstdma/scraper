@@ -16,6 +16,11 @@ export {
   linkBuilderRUN
 } from './core/mtgo/link-builder/link-builder.mtgo';
 
+export {
+  getDataFromYearMonth,
+  extractLinks
+} from './core/mtgo/link-searcher/link-searcher.mtgo'
+
 export { filtering } from './core/filter/filter.core';
 export {
   ICard,
