@@ -16,10 +16,17 @@ export {
   linkBuilderRUN
 } from './core/mtgo/link-builder/link-builder.mtgo';
 
+/**
+ * For the new website
+ */
 export {
   getDataFromYearMonth,
   extractLinks
-} from './core/mtgo/link-searcher/link-searcher.mtgo'
+} from './core/mtgo/link-searcher/link-searcher.mtgo';
+
+export {
+  rawParserMtgo
+} from './core/mtgo/raw-parser.mtgo';
 
 export { filtering } from './core/filter/filter.core';
 export {
