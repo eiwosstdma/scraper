@@ -60,5 +60,30 @@ export type TPlatform = typeof AHelperPlatform[number];
 export const AHelperOrganizer = [ 'unknown', 'wizard' ] as const;
 export type TOrganizer = typeof AHelperOrganizer[number];
 
-export const AHelperLevel = [ 'unknown', 'league', 'preliminary', 'challenge', 'showcase-challenge', 'super-qualifier', 'premier' ] as const;
+export const AHelperLevel = [
+  'unknown',
+  'league',
+  'preliminary',
+  'challenge',
+  'premier',
+  'showcase-challenge',
+  'showcase-qualifier',
+  'eternal-weekend',
+  'super-qualifier',
+] as const;
 export type TLevelOfPlay = typeof AHelperLevel[number];
+
+/**
+ *
+ */
+export interface MetaData {
+  title: string;
+  postedAt: string;
+  name: string;
+  playersNumber: number;
+  playersName: Array<string>;
+  uniqueID: string;
+  format: TFormat;
+  rawResults: string;
+  rawBinary: string;
+}
