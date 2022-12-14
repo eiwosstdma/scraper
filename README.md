@@ -1,6 +1,6 @@
-> **Warning**
->
-> DOCUMENTATION IS NOT FULLY WRITTEN YET
+> **Note**
+> 
+> Since the new website, a lot of stuff is becoming legacy.
 
 # Mtg data Scraper
 ## What is that ?
@@ -21,81 +21,103 @@ It's open source and free, as mentioned in the [ISC license](#ISC-License).
   npm i mtg-scrapper
 ```
 ### How to start with it
-It's a modular system, you can import only the function you need if you want.
-Though, if you just need to get data quickly without worrying about the API,
-just follow here;
+As simple as a serie of function which get an URL and gives you back some metadata and raw data
+to work with.
 
-To get data of the current day, just do that;
 ```typescript
-import { dataOfTheDay } from 'mtg-scrapper';
+//ESM
+import { rawParserMtgo } from 'mtg-scrapper';
 
-/**
- * You can give a configuration to specify formats and type of events,
- * By default, everything competitive mtgo format & events are scraped.
- */
-
-const bulk = await dataOfTheDay();
+const data = await rawParserMtgo('UrlOfTournamentOfMtgoWebsite');
 ```
-The data is an array containing the metadata of each tournament and deck lists of the tournament.
+```typescript
+//CJS
+const { rawParserMtgo } = require('mtg-scrapper');
+
+const data = await rawParserMtgo('UrlOfTournamentOfMtgoWebsite');
+```
+
+The « data » object is built upon an interface named MetaData and is described like that;
+```typescript
+interface MetaData {
+  title: string;
+  postedAt: string;
+  name: string;
+  playersNumber: number;
+  playersName: Array<string>;
+  uniqueID: string;
+  format: TFormat;
+  rawResults: string;
+  rawBinary: string;
+}
+```
+
+- uniqueID is an ID that is absolutely unique for any event, you can rerun the same event, and you'll
+always have the same ID, but it's not part of the website but built by the module.
+- rawResults is a string that can be parsed to JSON format, and is directly taken from the website.
+  Its structure is discussed below
+- rawBinary is the direct content of the page from the website.
+
+### Extracting « rawResults » data
+It's directly taken from the website, without any further processing. The following interface
+describes the structure of rawResults;
+```typescript
+interface RawResults {
+  _id: string;
+  event_name: string;
+  date: string;
+  event_type: string;
+  decks: Array<{
+    player: string;
+    loginid: number;
+    deck: Array<{
+      SB: boolean;
+      deck_cards: Array<{
+        card_attributes: {
+          type: string;
+          set: string;
+          color: string;
+          card_code: number;
+          rarity: string;
+          name: string;
+          cost: number;
+        };
+        quantity: number;
+      }>
+    }>
+  }>;
+  subheader?: string;
+  placement: Array<{
+    loginid: number;
+    rank: number;
+  }>;
+  standings?: Array<{
+    rank: number;
+    name: string;
+    GWP: number;
+    OGWP: number;
+    OMWP: number;
+    loginid: number;
+    points: number;
+  }>
+  brackets?: Array<{
+    index: number;
+    matches: Array<{
+      players: Array<{
+        loginid: number;
+        player: string;
+        seeding: number;
+        wins: number;
+        losses: number;
+        winner: boolean;
+      }>
+    }>
+  }>;
+}
+```
+It could seem a bit complicated, but it's just a big object with a lot of props.
 
 <br><br><br><hr>
-
-## API DOCUMENTATION
-Functions and Classes are described as Interface.
-
-### Filters
-```typescript
-interface filtering {
-  (deck: IDeck, filter: IFilter): IFilter['name'] | null;
-}
-```
-It will return the correct for the deck you passed in parameter. If nothing correspond,
-it returns the string 'unknown'.
-
-### Link Generators - MTGO (Probably will be the same API for other websites)
-```typescript
-/**
- * Create links without checking them, 
- * for a given configuration and a number of days.
- * It will cumulates tournaments within the array, 
- * starting from the current day through the number of days you specified.
- */
-interface linkGenerator{
-  (days: number, configuration?: IConfigurationLinker): Array<string>;
-}
-```
-```typescript
-/**
- * Create links without checking them, 
- * for a given configuration and a day in milmiseconds.
- * It does not cumulate the result if you specify and old day, 
- * but generate only links for the day.
- */
-interface generateLinksFrom {
-  (dayToScrap: number, configuration?: IConfigurationLinker): Array<string>;
-}
-```
-```typescript
-/**
- * Check if the link you give is a valid tournament link, 
- * it will await the time you've given in arguments if needed, 
- * if you have ton of links to check, 
- * it's better to make it await at least a second for each linl,
- * to not flood the given website.
- */
-interface checkLink {
-  (link: string, awaitFor?: number): Promise<string | null>
-}
-```
-```typescript
-/**
- * The same thing that checkLink but check a big array, 
- * return good links and null for links that are not valid.
- */
-interface checkArrayOfLinks {
-  (links: Array<stirng>, awaitFor?: number): Promise<Array<string | null>>;
-}
-```
 
 ## ISC License
 
