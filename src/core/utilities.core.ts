@@ -1,7 +1,7 @@
 /**
  * Node imports
  */
-import { randomBytes } from 'node:crypto';
+import { randomBytes, scrypt } from 'node:crypto';
 import { promisify } from 'node:util';
 import { get } from 'node:https';
 
@@ -11,8 +11,19 @@ import { get } from 'node:https';
 export const baseURLMTGOWebsite = () => 'https://www.mtgo.com/';
 export const baseURLMTGODeckLists = () => 'https://www.mtgo.com/en/mtgo/decklists/';
 
-export const generate12LString = () => {
-  return randomBytes(5).toString('hex');
+export const generate12LString = (length?: number) => {
+  return randomBytes(length ?? 6).toString('hex');
+};
+
+export const generateUniqueID = async (metadata: string) => {
+  return new Promise((resolve, reject) => {
+    scrypt(metadata, 'abcdefijklmnopqrstuvwxyz', 32, { N: 4 }, (err, derivedKey) => {
+      if (err) reject(err);
+      else {
+        resolve(derivedKey.toString('hex'));
+      }
+    });
+  });
 };
 
 export const sleepUntil = promisify(setTimeout);
