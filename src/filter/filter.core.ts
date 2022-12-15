@@ -1,4 +1,4 @@
-import { IFilter, IDeck } from '../types.core';
+import { IFilter, IDeck } from '../core/types.core';
 
 export const filtering = (deck: IDeck, filter: IFilter): IFilter['name'] | null => {
   if (deck.format !== filter.format) return null;

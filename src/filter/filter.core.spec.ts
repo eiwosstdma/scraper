@@ -1,4 +1,4 @@
-import { Deck, Filter } from '../definitions.core';
+import { Deck, Filter } from '../core/definitions.core';
 import { filtering } from './filter.core';
 
 describe('Testing filter.core.ts functions', () => {

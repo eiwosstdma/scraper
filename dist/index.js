@@ -29,35 +29,21 @@ __export(src_exports, {
   Deck: () => Deck,
   Filter: () => Filter,
   Tournament: () => Tournament,
-  checkArrayOfLinks: () => checkArrayOfLinks,
-  checkLink: () => checkLink,
-  dataOfTheDay: () => dataOfTheDay,
-  extractLinks: () => extractLinks,
   filtering: () => filtering,
-  generateLinksFrom: () => generateLinksFrom,
-  getDataFromUrl: () => getDataFromUrl,
-  getDataFromYearMonth: () => getDataFromYearMonth,
   guardGeneric: () => guardGeneric,
-  linkBuilderRUN: () => linkBuilderRUN,
-  linkGenerator: () => linkGenerator,
-  parseMtgo: () => parseMtgo,
   rawParserMtgo: () => rawParserMtgo,
-  scraperParserRUN: () => scraperParserRUN
+  tournamentScraperMtgo: () => tournamentScraperMtgo
 });
 module.exports = __toCommonJS(src_exports);
 
-// src/core/mtgo/scraper-parser/scraper-parser.mtgo.ts
-var import_jsdom2 = require("jsdom");
+// src/core/mtgo/tournament-scraper/tournament-scraper.mtgo.ts
+var import_jsdom = require("jsdom");
 
 // src/core/utilities.core.ts
 var import_node_crypto = require("crypto");
 var import_node_util = require("util");
 var import_node_https = require("https");
-var baseURLMTGOWebsite = () => "https://www.mtgo.com/";
 var baseURLMTGODeckLists = () => "https://www.mtgo.com/en/mtgo/decklists/";
-var generate12LString = (length) => {
-  return (0, import_node_crypto.randomBytes)(length ?? 6).toString("hex");
-};
 var generateUniqueID = async (metadata) => {
   return new Promise((resolve, reject) => {
     (0, import_node_crypto.scrypt)(metadata, "abcdefijklmnopqrstuvwxyz", 32, { N: 4 }, (err, derivedKey) => {
@@ -96,229 +82,22 @@ var customFetch = (url) => {
   });
 };
 
-// src/core/mtgo/link-builder/link-builder.mtgo.ts
-var import_jsdom = require("jsdom");
-function timeIntoDate(dayInMilli) {
-  const dateTo = new Date(dayInMilli ?? new Date().getTime());
-  const month = (dateTo.getUTCMonth() + 1).toString();
-  const day = dateTo.getUTCDate().toString();
-  const theYear = dateTo.getFullYear();
-  const theMonth = month.length === 1 ? "0" + month : month;
-  const theDay = day.length === 1 ? "0" + day : day;
-  return `${theYear}-${theMonth}-${theDay}`;
-}
-function linkGenerator(howManyDaysBackward, configuration) {
-  const baseUrl = baseURLMTGOWebsite();
-  const allFormat = configuration?.wantedFormat ?? ["vintage", "legacy", "modern", "pioneer", "pauper", "standard"];
-  const allLevel = configuration?.wantedLevel ?? ["league", "preliminary", "challenge", "showcase-challenge", "super-qualifier"];
-  const currentDate = new Date();
-  const allLinksArray = [];
-  for (let i = 0; i <= howManyDaysBackward; i++) {
-    const dateToScrap = new Date(currentDate.getTime() - 86400 * 1e3 * i);
-    const dateToBeBuilt = timeIntoDate(dateToScrap.getTime());
-    const allLinks = [];
-    allFormat.forEach((format) => allLevel.forEach((level) => {
-      const url = `${baseUrl}${format}-${level}-${dateToBeBuilt}`;
-      allLinks.push(url);
-    }));
-    allLinksArray.push(...allLinks);
-  }
-  return allLinksArray;
-}
-function generateLinksFrom(fromTheDay, configuration) {
-  const baseUrl = baseURLMTGOWebsite();
-  const allFormat = configuration?.wantedFormat ?? ["vintage", "legacy", "modern", "pioneer", "pauper", "standard"];
-  const allLevel = configuration?.wantedLevel ?? ["league", "preliminary", "challenge", "showcase-challenge", "super-qualifier"];
-  const allLinksArray = [];
-  const dateToScrap = new Date(fromTheDay);
-  const dateToBeBuilt = timeIntoDate(dateToScrap.getTime());
-  const allLinks = [];
-  allFormat.forEach((format) => allLevel.forEach((level) => {
-    const url = `${baseUrl}${format}-${level}-${dateToBeBuilt}`;
-    allLinks.push(url);
-  }));
-  allLinksArray.push(...allLinks);
-  return allLinksArray;
-}
-async function checkLink(link, awaitFor) {
-  try {
-    const result = await customFetch(link);
-    const doc = new import_jsdom.JSDOM(result).window.document;
-    const isNotFound = doc.querySelector(".no-result");
-    await sleepUntil(awaitFor ?? 500);
-    if (isNotFound?.textContent?.replace(/\s/g, "") !== "noresultfound") {
-      return link;
-    } else
-      return null;
-  } catch (err) {
-    console.log(err);
-    return null;
-  }
-}
-async function checkArrayOfLinks(links, awaitFor) {
-  return Promise.all(links.map((link) => checkLink(link, awaitFor ?? 500)));
-}
-async function linkBuilderRUN(howMuchBackward, configuration, arrOfLinks) {
-  if (arrOfLinks) {
-    return (await checkArrayOfLinks(arrOfLinks)).filter((value) => value !== null);
-  } else {
-    const allTournamentLinks = linkGenerator(howMuchBackward, configuration);
-    return (await checkArrayOfLinks(allTournamentLinks)).filter((value) => value !== null);
-  }
-}
-
-// src/core/mtgo/scraper-parser/scraper-parser.mtgo.ts
-function createTournamentData(name, totalPlayers, playedAtFrom) {
-  const fileNameArr = name.split(".");
-  const fileNameArrName = fileNameArr[1].split("-");
-  fileNameArrName.pop();
-  fileNameArrName.pop();
-  fileNameArrName.pop();
-  fileNameArrName.reverse();
-  fileNameArrName.pop();
-  fileNameArrName.reverse();
-  const dateFrom = fileNameArr[1].split("-");
-  return {
-    publicId: fileNameArr[2],
-    name: fileNameArr[1],
-    postedAt: `${dateFrom[dateFrom.length - 3]}-${dateFrom[dateFrom.length - 2]}-${dateFrom[dateFrom.length - 1]}`,
-    playedAt: fileNameArrName.toString() === "league" ? `${dateFrom[dateFrom.length - 3]}-${dateFrom[dateFrom.length - 2]}-${dateFrom[dateFrom.length - 1]}` : playedAtFrom,
-    totalPlayer: totalPlayers,
-    linkTo: `https://magic.wizards.com/en/articles/archive/mtgo-standings/${fileNameArr[1]}`,
-    format: fileNameArr[1].split("-")[0],
-    organizer: "wizard",
-    platform: "mtgo",
-    levelOfPlay: fileNameArrName.toString().replace(",", "-")
-  };
-}
-function createDeckData(element) {
-  const subIdName = element.getAttribute("subid");
-  const textDeckList = element.querySelectorAll("div.toggle-text.toggle-subnav > div.deck-list-text > div.sorted-by-overview-container.sortedContainer > div.clearfix.element > span.row");
-  const mainDeck = [];
-  for (const text of textDeckList) {
-    const newObj = {
-      quantity: Number(text.children[0].innerHTML),
-      name: text.children[1].children[0]?.innerHTML ?? text.children[1].innerHTML
-    };
-    mainDeck.push(newObj);
-  }
-  const sideDeckList = element.querySelectorAll("div.toggle-text.toggle-subnav > div.deck-list-text > div.sorted-by-sideboard-container.clearfix.element > span.row");
-  const sideDeck = [];
-  for (const text of sideDeckList) {
-    const newObj = {
-      quantity: Number(text.getElementsByClassName("card-count")[0].innerHTML),
-      name: text.getElementsByClassName("card-name")[0].firstElementChild?.innerHTML ?? text.getElementsByClassName("card-name")[0]?.innerHTML
-    };
-    sideDeck.push(newObj);
-  }
-  const ownerName = element.id;
-  return {
-    name: "unknown",
-    owner: ownerName.replace("_", "").replace("-", ""),
-    subId: subIdName,
-    main: mainDeck,
-    side: sideDeck
-  };
-}
-function createMetaData(metaData) {
-  return {
-    rank: Number(metaData.children[0].innerHTML),
-    point: Number(metaData.children[2].innerHTML),
-    omwp: metaData.children[3].innerHTML,
-    gwp: metaData.children[4].innerHTML,
-    ogwp: metaData.children[5].innerHTML
-  };
-}
-async function getDataFromUrl(url) {
-  const urlArrSegment = url.split("/");
-  const endPart = urlArrSegment[urlArrSegment.length - 1];
-  const randomHex = generate12LString();
-  try {
-    const data = await customFetch(url);
-    await sleepUntil(100);
-    const fileName = `mtgo.${endPart}.${randomHex}.html`;
-    return {
-      name: fileName,
-      data
-    };
-  } catch (err) {
-    console.log(err);
-    return null;
-  }
-}
-async function parseMtgo(name, content) {
-  try {
-    const data = new import_jsdom2.JSDOM(content).window.document;
-    const allDeckLists = Array.from(data.querySelectorAll(".deck-group"));
-    const dateFromADecklist = data.querySelector("div.title-deckicon > span.deck-meta");
-    const currentDatePlayed = dateFromADecklist.children[1].textContent.split(" ").join("").split("on").reverse()[0].replaceAll("/", "-");
-    const tournamentData = createTournamentData(name, allDeckLists.length, currentDatePlayed);
-    const players = allDeckLists.map((deckList) => createDeckData(deckList));
-    let finalDeckLists;
-    if (tournamentData.levelOfPlay !== "league") {
-      const allMetaData = data.querySelector("table.sticky-enabled");
-      const tBody = Array.from(allMetaData.lastElementChild?.querySelectorAll("tr"));
-      const finalMetaData = tBody.map((data2) => createMetaData(data2));
-      finalDeckLists = players.map((value, index) => {
-        return {
-          ...value,
-          ...finalMetaData[index],
-          tournamentName: tournamentData.name,
-          playedAt: tournamentData.playedAt,
-          format: tournamentData.format
-        };
-      });
-    } else {
-      finalDeckLists = players.map((data2) => {
-        return {
-          ...data2,
-          tournamentName: tournamentData.name,
-          playedAt: tournamentData.playedAt,
-          format: tournamentData.format
-        };
-      });
-    }
-    return {
-      tournamentData,
-      finalDeckLists
-    };
-  } catch (err) {
-    console.log(err);
-    return null;
-  }
-}
-async function scraperParserRUN(url) {
-  const dataFromUrl = await getDataFromUrl(url);
-  if (dataFromUrl !== null) {
-    return await parseMtgo(dataFromUrl.name, dataFromUrl.data);
-  } else
-    return null;
-}
-async function dataOfTheDay(configuration) {
-  const links = generateLinksFrom(Date.now(), configuration);
-  const awaitedBulkData = links.map((link) => scraperParserRUN(link));
-  return Promise.all(awaitedBulkData);
-}
-
 // src/core/mtgo/tournament-scraper/tournament-scraper.mtgo.ts
-var import_jsdom3 = require("jsdom");
-var getDataFromYearMonth = async (monthInNumber, yearInNumber) => {
-  const month = monthInNumber ?? new Date().getMonth() + 1;
-  const year = yearInNumber ?? new Date().getFullYear();
-  const linkToScrap = baseURLMTGODeckLists() + year + "/" + month;
-  return await customFetch(linkToScrap);
-};
-var extractLinks = (rawData) => {
-  const data = new import_jsdom3.JSDOM(rawData).window.document;
-  const decklistItemLists = Array.from(data.querySelectorAll(".decklists-item"));
-  return decklistItemLists.map((element) => element.firstElementChild?.getAttribute("href"));
+var tournamentScraperMtgo = async (month, year) => {
+  const currentMonth = month ?? new Date().getMonth() + 1;
+  const currentYear = year ?? new Date().getFullYear();
+  const url = baseURLMTGODeckLists() + currentYear + "/" + currentMonth;
+  const data = await customFetch(url);
+  const fromDoc = new import_jsdom.JSDOM(data).window.document;
+  const listOfElements = Array.from(fromDoc.querySelectorAll(".decklists-item"));
+  return listOfElements.map((element) => element.firstElementChild?.getAttribute("href"));
 };
 
-// src/core/mtgo/raw-parser.mtgo.ts
-var import_jsdom4 = require("jsdom");
+// src/core/mtgo/raw-parser/raw-parser.mtgo.ts
+var import_jsdom2 = require("jsdom");
 var rawParserMtgo = async (url) => {
   const rawBinary = await customFetch(url);
-  const window = new import_jsdom4.JSDOM(rawBinary).window;
+  const window = new import_jsdom2.JSDOM(rawBinary).window;
   const data = window.document;
   const title = data.querySelector("#decklist-item > div.site-content > div.container-page-fluid.decklist-item-page > h1")?.textContent;
   const postedAt = data.querySelector("#decklist-item > div.site-content > div.container-page-fluid.decklist-item-page > p")?.textContent;
@@ -493,18 +272,8 @@ var ConfigurationLinker = class {
   Deck,
   Filter,
   Tournament,
-  checkArrayOfLinks,
-  checkLink,
-  dataOfTheDay,
-  extractLinks,
   filtering,
-  generateLinksFrom,
-  getDataFromUrl,
-  getDataFromYearMonth,
   guardGeneric,
-  linkBuilderRUN,
-  linkGenerator,
-  parseMtgo,
   rawParserMtgo,
-  scraperParserRUN
+  tournamentScraperMtgo
 });

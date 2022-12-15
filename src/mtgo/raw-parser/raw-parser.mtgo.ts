@@ -7,8 +7,8 @@
  * Module imports
  */
 import { JSDOM } from 'jsdom';
-import { customFetch, generateUniqueID } from '../../utilities.core';
-import { TFormat, MetaData } from '../../types.core';
+import { customFetch, generateUniqueID } from '../../core/utilities.core';
+import { TFormat, MetaData } from '../../core/types.core';
 
 /**
  * Types

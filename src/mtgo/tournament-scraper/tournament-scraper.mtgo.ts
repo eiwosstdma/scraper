@@ -2,7 +2,7 @@
  * Imports
  */
 import { JSDOM } from 'jsdom';
-import { baseURLMTGODeckLists, customFetch } from '../../utilities.core';
+import { baseURLMTGODeckLists, customFetch } from '../../core/utilities.core';
 
 /**
  * Exports

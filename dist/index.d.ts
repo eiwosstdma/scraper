@@ -1,4 +1,9 @@
 /**
+ * Exports
+ */
+declare const tournamentScraperMtgo: (month?: number, year?: number) => Promise<(string | null | undefined)[]>;
+
+/**
  * Types for the Application
  */
 interface ICard {
@@ -73,43 +78,6 @@ interface MetaData {
  * Node imports
  */
 
-declare function getDataFromUrl(url: string): Promise<null | {
-    name: string;
-    data: string;
-}>;
-declare function parseMtgo(name: string, content: string): Promise<null | {
-    tournamentData: ITournament;
-    finalDeckLists: Array<IDeck>;
-}>;
-declare function scraperParserRUN(url: string): Promise<{
-    tournamentData: ITournament;
-    finalDeckLists: Array<IDeck>;
-} | null>;
-declare function dataOfTheDay(configuration?: IConfigurationLinker): Promise<({
-    tournamentData: ITournament;
-    finalDeckLists: IDeck[];
-} | null)[]>;
-
-/**
- * Node imports
- */
-
-declare function linkGenerator(howManyDaysBackward: number, configuration?: IConfigurationLinker): Array<string>;
-declare function generateLinksFrom(fromTheDay: number, configuration?: IConfigurationLinker): Array<string>;
-declare function checkLink(link: string, awaitFor?: number): Promise<string | null>;
-declare function checkArrayOfLinks(links: Array<string>, awaitFor?: number): Promise<(string | null)[]>;
-declare function linkBuilderRUN(howMuchBackward: number, configuration?: IConfigurationLinker, arrOfLinks?: Array<string>): Promise<Array<string>>;
-
-/**
- * Exports
- */
-declare const getDataFromYearMonth: (monthInNumber?: number, yearInNumber?: number) => Promise<string>;
-declare const extractLinks: (rawData: string) => (string | null | undefined)[];
-
-/**
- * Node imports
- */
-
 /**
  * Types
  */
@@ -178,4 +146,4 @@ declare class ConfigurationLinker implements IConfigurationLinker {
 
 declare const guardGeneric: <T>(unk: any, typeInArr: Readonly<Array<string>>) => T | null;
 
-export { AHelperFormat, AHelperLevel, AHelperOrganizer, AHelperPlatform, Card, ConfigurationLinker, Deck, Filter, ICard, IConfigurationLinker, IDeck, IFilter, ITournament, TFormat, TLevelOfPlay, TOrganizer, TPlatform, Tournament, checkArrayOfLinks, checkLink, dataOfTheDay, extractLinks, filtering, generateLinksFrom, getDataFromUrl, getDataFromYearMonth, guardGeneric, linkBuilderRUN, linkGenerator, parseMtgo, rawParserMtgo, scraperParserRUN };
+export { AHelperFormat, AHelperLevel, AHelperOrganizer, AHelperPlatform, Card, ConfigurationLinker, Deck, Filter, ICard, IConfigurationLinker, IDeck, IFilter, ITournament, TFormat, TLevelOfPlay, TOrganizer, TPlatform, Tournament, filtering, guardGeneric, rawParserMtgo, tournamentScraperMtgo };

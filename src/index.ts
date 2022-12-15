@@ -1,35 +1,17 @@
 /**
- * Export for libs usability
- */
-export {
-  getDataFromUrl,
-  parseMtgo,
-  scraperParserRUN,
-  dataOfTheDay
-} from './core/mtgo/scraper-parser/scraper-parser.mtgo';
-
-export {
-  linkGenerator,
-  generateLinksFrom,
-  checkLink,
-  checkArrayOfLinks,
-  linkBuilderRUN
-} from './core/mtgo/link-builder/link-builder.mtgo';
-
-/**
  * For the new website
  */
 export {
   tournamentScraperMtgo
-} from './core/mtgo/tournament-scraper/tournament-scraper.mtgo';
+} from './mtgo/tournament-scraper/tournament-scraper.mtgo';
 
 export {
   rawParserMtgo
-} from './core/mtgo/raw-parser/raw-parser.mtgo';
+} from './mtgo/raw-parser/raw-parser.mtgo';
 
 export {
   filtering
-} from './core/filter/filter.core';
+} from './filter/filter.core';
 /**
  * Types
  */
