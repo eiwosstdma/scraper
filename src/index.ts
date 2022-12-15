@@ -20,15 +20,19 @@ export {
  * For the new website
  */
 export {
-  getDataFromYearMonth,
-  extractLinks
-} from './core/mtgo/link-searcher/link-searcher.mtgo';
+  tournamentScraperMtgo
+} from './core/mtgo/tournament-scraper/tournament-scraper.mtgo';
 
 export {
   rawParserMtgo
-} from './core/mtgo/raw-parser.mtgo';
+} from './core/mtgo/raw-parser/raw-parser.mtgo';
 
-export { filtering } from './core/filter/filter.core';
+export {
+  filtering
+} from './core/filter/filter.core';
+/**
+ * Types
+ */
 export {
   ICard,
   IFilter,
@@ -45,6 +49,9 @@ export {
   AHelperLevel
 } from './core/types.core';
 
+/**
+ * Definitions
+ */
 export {
   Card,
   Filter,
